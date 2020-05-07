@@ -1,10 +1,14 @@
+import os
 from django.core.mail import send_mail
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 
 from blog.forms import EmailPostForm, CommentForm
 from blog.models import Post
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv()
+
 
 
 class PostListView(ListView):
@@ -69,7 +73,7 @@ def post_share(request, post_id):
             post_url = request.build_absolute_uri(post.get_absolute_url())
             subject = '{} ({}) recommends you reading "{}"'.format(cd['name'], cd['email'], post.title)
             message = 'Read "{}" at {}\n\n{}\'s comments: {}'.format(post.title, post_url, cd['name'], cd['comments'])
-            send_mail(subject, message, 'battle.smtp@gmail.com', [cd['to']])
+            send_mail(subject, message, os.environ.get('DJANGO_EMAIL_HOST_USER'), [cd['to']])
             sent = True
     else:
         form = EmailPostForm()

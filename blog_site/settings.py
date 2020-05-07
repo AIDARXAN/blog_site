@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv, find_dotenv
+load_dotenv()
+
+
+def get_boolean_env(name):
+    env_var = os.environ.get(name)
+    return env_var == 'True'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,10 +27,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'kvg3$$%x8644vl*dw_wz-t&vg$)@m9(7p8zg5bb!d4(z+_(bdt'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'jx-+zf@gixi@s=r$^y&#7o$m2+pt%7*sc&pbjdloxty7=lqsr3')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = get_boolean_env('DJANGO_DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -121,8 +128,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'battle.smtp@gmail.com'
-EMAIL_HOST_PASSWORD = 'battle12345+'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_HOST = os.environ.get('DJANGO_EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('DJANGO_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.environ.get('DJANGO_EMAIL_PORT')
+EMAIL_USE_TLS = os.environ.get('DJANGO_EMAIL_USE_TLS')
